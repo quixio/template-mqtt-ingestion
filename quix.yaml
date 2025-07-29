@@ -341,3 +341,5 @@ topics:
     dataTier: Bronze
   - name: mqtt_data
     dataTier: Bronze
+  - name: normalized_data
+    dataTier: Silver
