@@ -63,7 +63,7 @@ deployments:
         inputType: FreeText
         description: The port of your MQTT server
         required: true
-        value: 1883
+        value: 80
       - name: MQTT_USERNAME
         inputType: FreeText
         description: Username of your MQTT user
@@ -258,6 +258,8 @@ deployments:
     network:
       serviceName: mqtt-server
       ports:
+        - port: 80
+          targetPort: 9001
         - port: 1883
           targetPort: 1883
     variables:
