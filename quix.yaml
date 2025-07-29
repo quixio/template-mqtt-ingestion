@@ -1,0 +1,345 @@
+# Quix Project Descriptor
+# This file describes the data pipeline and configuration of resources of a Quix Project.
+
+metadata:
+  version: 1.0
+
+# This section describes the Deployments of the data pipeline
+deployments:
+  - name: Grafana
+    application: grafana
+    version: latest
+    deploymentType: Service
+    resources:
+      cpu: 500
+      memory: 500
+      replicas: 1
+    publicAccess:
+      enabled: true
+      urlPrefix: grafana
+    state:
+      enabled: true
+      size: 1
+    network:
+      serviceName: grafana
+      ports:
+        - port: 80
+          targetPort: 3000
+    variables:
+      - name: GF_SECURITY_ADMIN_PASSWORD
+        inputType: Secret
+        description: Password for the admin user
+        required: true
+        secretKey: influxdb_admin_token
+      - name: INFLUXDB_TOKEN
+        inputType: Secret
+        description: The optional InfluxDB Token to use
+        secretKey: influxdb_admin_token
+  - name: MQTT Source
+    application: mqtt-source
+    version: latest
+    deploymentType: Service
+    resources:
+      cpu: 200
+      memory: 200
+      replicas: 1
+    variables:
+      - name: output
+        inputType: OutputTopic
+        description: Name of the output topic to publish to.
+        required: true
+        value: mqtt_data
+      - name: MQTT_TOPIC
+        inputType: FreeText
+        description: The root for messages in MQTT, this can be anything
+        required: true
+        value: printers/#
+      - name: MQTT_SERVER
+        inputType: FreeText
+        description: The address of your MQTT server
+        required: true
+        value: mqtt-server
+      - name: MQTT_PORT
+        inputType: FreeText
+        description: The port of your MQTT server
+        required: true
+        value: 1883
+      - name: MQTT_USERNAME
+        inputType: FreeText
+        description: Username of your MQTT user
+        value: admin
+      - name: MQTT_VERSION
+        inputType: FreeText
+        description: 'MQTT protocol version: 3.1, 3.1.1, 5'
+        required: true
+        value: 3.1.1
+      - name: MQTT_PASSWORD
+        inputType: Secret
+        secretKey: mqtt_password
+  - name: OPC UA Server
+    application: opc-ua-server
+    version: latest
+    deploymentType: Service
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    network:
+      serviceName: intopcserver
+      ports:
+        - port: 4840
+          targetPort: 4840
+  - name: OPC UA Source
+    application: opc-ua-source
+    version: latest
+    deploymentType: Service
+    resources:
+      cpu: 200
+      memory: 200
+      replicas: 1
+    variables:
+      - name: output
+        inputType: OutputTopic
+        description: This is the Quix Topic that will receive the generated data.
+        required: true
+        value: generated-opc_ua_data
+      - name: OPC_SERVER_URL
+        inputType: FreeText
+        description: The URL to your OPC UA server
+        required: true
+        value: https://intopcserver:4840/freeopcua/server/
+      - name: OPC_NAMESPACE
+        inputType: FreeText
+        description: The namespace of the data coming from your OPC UA server
+        required: true
+        value: http://quix.freeopcua.io
+      - name: PARAMETER_NAMES_TO_PROCESS
+        inputType: FreeText
+        description: List of parameters from your OPC UA server that you want to process. e.g. ['a', 'b', 'c']. NB:Use single quotes.
+        required: true
+        value: "['T001', 'T002']"
+      - name: LOGLEVEL
+        inputType: FreeText
+        description: Desired loglevel; Use 'DEBUG' to see change events, else INFO for max performance.
+        value: INFO
+  - name: MQTT Sink
+    application: mqtt-sink
+    version: latest
+    deploymentType: Service
+    resources:
+      cpu: 200
+      memory: 200
+      replicas: 1
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: Name of the input topic to listen to.
+        required: true
+        value: external-mqtt_data
+      - name: MQTT_CLIENT_ID
+        inputType: FreeText
+        description: A client ID for the sink
+        required: true
+        value: printer-data-sink
+      - name: MQTT_TOPIC_ROOT
+        inputType: FreeText
+        description: The root for messages in MQTT, this can be anything
+        value: printers
+      - name: MQTT_SERVER
+        inputType: FreeText
+        description: The address of your MQTT server
+        required: true
+        value: mqtt-server
+      - name: MQTT_PORT
+        inputType: FreeText
+        description: The port of your MQTT server
+        required: true
+        value: 1883
+      - name: MQTT_USERNAME
+        inputType: FreeText
+        description: The username to connect to MQTT with
+        required: true
+        value: admin
+      - name: MQTT_PASSWORD
+        inputType: Secret
+        description: The password to connect to MQTT with
+        required: true
+        secretKey: mqtt_password
+      - name: MQTT_VERSION
+        inputType: FreeText
+        description: 'MQTT protocol version: 3.1, 3.1.1, 5'
+        required: true
+        value: 3.1.1
+      - name: MQTT_USE_TLS
+        inputType: FreeText
+        description: Set to true if the server uses TLS
+        required: true
+        value: false
+  - name: OPC UA to MQTT
+    application: opc-ua-to-mqtt
+    version: latest
+    deploymentType: Service
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: Name of the input topic to listen to.
+        value: generated-opc_ua_data
+      - name: output
+        inputType: OutputTopic
+        description: Name of the output topic to write to.
+        value: external-mqtt_data
+  - name: MQTT Data Normalization
+    application: mqtt-data-normalization
+    version: latest
+    deploymentType: Service
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    state:
+      enabled: true
+      size: 1
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: Name of the input topic to listen to.
+        value: mqtt_data
+      - name: output
+        inputType: OutputTopic
+        description: Name of the output topic to write to.
+        value: normalized_data
+  - name: InfluxDB2
+    application: influxdb2
+    version: latest
+    deploymentType: Service
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    state:
+      enabled: true
+      size: 1
+    network:
+      serviceName: influxdb2
+      ports:
+        - port: 80
+          targetPort: 8086
+    variables:
+      - name: DOCKER_INFLUXDB_INIT_ADMIN_TOKEN
+        inputType: Secret
+        description: Default Admin Token to initialize Influx with
+        required: true
+        secretKey: influxdb_admin_token
+      - name: DOCKER_INFLUXDB_INIT_PASSWORD
+        inputType: Secret
+        description: Default Admin password to initialize Influx with
+        required: true
+        secretKey: influxdb_admin_password
+      - name: DOCKER_INFLUXDB_INIT_BUCKET
+        inputType: FreeText
+        description: Bucket Name to initialize Influx with
+        required: true
+        value: my_bucket
+  - name: MQTT Server
+    application: mqtt-server
+    version: latest
+    deploymentType: Service
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    state:
+      enabled: true
+      size: 5
+    network:
+      serviceName: mqtt-server
+      ports:
+        - port: 1883
+          targetPort: 1883
+    variables:
+      - name: MQTT_USERNAME
+        inputType: FreeText
+        description: The username to connect to the server with
+        required: true
+        value: admin
+      - name: MQTT_PASSWORD
+        inputType: Secret
+        description: The password to connect to the server with
+        required: true
+        secretKey: mqtt_password
+  - name: InfluxDB2 Sink
+    application: influxdb2-sink
+    version: latest
+    deploymentType: Service
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: This is the input topic
+        required: true
+        value: normalized_data
+      - name: INFLUXDB_HOST
+        inputType: FreeText
+        description: Host address for the InfluxDB instance.
+        required: true
+        value: http://influxdb2:80
+      - name: INFLUXDB_TOKEN
+        inputType: Secret
+        description: Authentication token to access InfluxDB.
+        required: true
+        secretKey: influxdb_admin_token
+      - name: INFLUXDB_ORG
+        inputType: FreeText
+        description: Organization name in InfluxDB.
+        value: quix
+      - name: INFLUXDB_MEASUREMENT_NAME
+        inputType: FreeText
+        description: The InfluxDB measurement to write data to. If not specified, the name of the input topic will be used
+        value: printers
+      - name: INFLUXDB_DATABASE
+        inputType: FreeText
+        description: Database name in InfluxDB where data should be stored.
+        required: true
+        value: my_bucket
+      - name: INFLUXDB_TAG_KEYS
+        inputType: FreeText
+        description: 'The tags to include when writing the measurement data. Example: Tag1,Tag2'
+        value: machine
+      - name: INFLUXDB_FIELD_KEYS
+        inputType: FreeText
+        description: 'The fields to include when writing the measurement data. Example: Field1,Field2'
+      - name: CONSUMER_GROUP_NAME
+        inputType: FreeText
+        description: The name of the consumer group to use when consuming from Kafka
+        required: true
+        value: influxdb2-sink3
+      - name: TIMESTAMP_COLUMN
+        inputType: FreeText
+        description: 'The column containing the timestamp column. NOTE: Must be nanoseconds'
+        value: timestamp
+      - name: BUFFER_SIZE
+        inputType: FreeText
+        description: The number of records that sink holds before flush data to the InfluxDb
+        value: 1000
+      - name: BUFFER_TIMEOUT
+        inputType: FreeText
+        description: The number of seconds that sink holds before flush data to the InfluxDb
+        value: 1
+
+# This section describes the Topics of the data pipeline
+topics:
+  - name: generated-opc_ua_data
+    dataTier: Bronze
+  - name: external-mqtt_data
+    dataTier: Bronze
+  - name: mqtt_data
+    dataTier: Bronze
+  - name: normalized_data
+    dataTier: Silver

@@ -1,0 +1,16 @@
+name: MQTT Server
+language: docker
+variables:
+  - name: MQTT_USERNAME
+    inputType: FreeText
+    description: The username to connect to the server with
+    defaultValue: admin
+    required: true
+  - name: MQTT_PASSWORD
+    inputType: Secret
+    description: The password to connect to the server with
+    defaultValue: MQTT_PASSWORD
+    required: true
+dockerfile: dockerfile
+defaultFile: dockerfile
+libraryItemId: mqtt

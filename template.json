@@ -1,0 +1,12 @@
+{
+  "TemplateId": "mqtt-simple-ingestion",
+  "Name": "Simple Ingestion Template",
+  "Description": "This template demonstrates a foundational data ingestion pipeline that collects data from MQTT sources, applies a normalization transformation to standardize incoming sensor data, and writes the results to a time-series sink and includes Grafana visualizations. Ideal for IoT and telemetry scenarios.",
+  "Tags": {
+    "languages": ["python"],
+    "category": ["sample", "demo"]
+  },
+  "ImageFile": "demo-image.png",
+  "ReadmeFile": "README.md",
+  "Published": true
+}

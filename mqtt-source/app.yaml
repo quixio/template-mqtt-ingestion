@@ -1,0 +1,44 @@
+name: MQTT Source
+language: python
+variables:
+  - name: output
+    inputType: OutputTopic
+    description: Name of the output topic to publish to.
+    defaultValue: mqtt
+    required: true
+  - name: MQTT_TOPIC
+    inputType: FreeText
+    multiline: false
+    description: The root for messages in MQTT, this can be anything
+    defaultValue: ''
+    required: true
+  - name: MQTT_SERVER
+    inputType: FreeText
+    multiline: false
+    description: The address of your MQTT server
+    defaultValue: c1f91eda588740f5a81e4ed3fd9c86d1.s1.eu.hivemq.cloud
+    required: true
+  - name: MQTT_PORT
+    inputType: FreeText
+    multiline: false
+    description: The port of your MQTT server
+    defaultValue: '8883'
+    required: true
+  - name: MQTT_USERNAME
+    inputType: FreeText
+    multiline: false
+    description: Username of your MQTT user
+    defaultValue: admin
+  - name: MQTT_VERSION
+    inputType: FreeText
+    description: 'MQTT protocol version: 3.1, 3.1.1, 5'
+    defaultValue: 3.1.1
+    required: true
+  - name: MQTT_PASSWORD
+    inputType: Secret
+    multiline: false
+    defaultValue: INFLUX_ADMIN_TOKEN
+dockerfile: dockerfile
+runEntryPoint: main.py
+defaultFile: mqtt_function.py
+libraryItemId: mqtt-source
