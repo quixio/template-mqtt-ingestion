@@ -58,7 +58,7 @@ deployments:
         inputType: FreeText
         description: The address of your MQTT server
         required: true
-        value: mqtt-server
+        value: mqtt-server-peter-templateprinterdatageneration-prod.app-staging.quix.io
       - name: MQTT_PORT
         inputType: FreeText
         description: The port of your MQTT server
