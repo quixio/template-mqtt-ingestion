@@ -35,7 +35,7 @@ def window_finalizer(finalized_window: dict):
         "machine": machine
     }
 
-
+# Typical app setup
 app = Application(
     consumer_group="mqtt_data_normalization",
     auto_offset_reset="earliest")
@@ -43,15 +43,26 @@ input_topic = app.topic(os.environ["input"], value_deserializer="bytes", key_des
 output_topic = app.topic(os.environ["output"])
 sdf = app.dataframe(input_topic)
 
+# Our kafka key has necessary data packed inside it
 sdf = sdf.apply(expand_key, metadata=True)
-sdf.update(lambda row: print('PRIOR TO TIMESTAMP')).print(metadata=True)
+
+# Overwrite the original kafka message timestamp with the timestamp from the event,
+# then drop it from the body
 sdf = sdf.set_timestamp(lambda row, *_: row["timestamp"] - 1)
 sdf = sdf.drop("timestamp")
+
+# Even though there's only 1 machine in this case, make sure we groupby so machine data
+# aligns to the right kafka partitions since the original kafka message key is not just
+# the machine name.
 sdf = sdf.group_by("machine")
-sdf.update(lambda row: print('AFTER GROUPBY')).print(metadata=True)
+
+# Do our windowing operation, which groups up all our fields into 1 mean value for each
+# across 1 second and outputs the aggregate as a single message.
 sdf = sdf.hopping_window(1000, 200, 500).reduce(reducer=window_reducer, initializer=window_initializer).final()
 sdf = sdf.apply(window_finalizer)
 sdf.to_topic(output_topic)
 
+
+# Ideally, always run with this preamble.
 if __name__ == "__main__":
     app.run()
