@@ -45,7 +45,7 @@ sdf = app.dataframe(input_topic)
 
 sdf = sdf.apply(expand_key, metadata=True)
 sdf.update(lambda row: print('PRIOR TO TIMESTAMP')).print(metadata=True)
-sdf = sdf.set_timestamp(lambda row, *_: row["timestamp"])
+sdf = sdf.set_timestamp(lambda row, *_: row["timestamp"] - 1)
 sdf = sdf.drop("timestamp")
 sdf = sdf.group_by("machine")
 sdf.update(lambda row: print('AFTER GROUPBY')).print(metadata=True)
