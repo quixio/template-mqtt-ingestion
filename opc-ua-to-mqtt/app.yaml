@@ -1,0 +1,16 @@
+name: OPC UA to MQTT
+language: python
+variables:
+  - name: input
+    inputType: InputTopic
+    description: Name of the input topic to listen to.
+    defaultValue: opc_ua_data
+  - name: output
+    inputType: OutputTopic
+    multiline: false
+    description: Name of the output topic to write to.
+    defaultValue: mqtt
+dockerfile: dockerfile
+runEntryPoint: main.py
+defaultFile: main.py
+libraryItemId: starter-transformation

@@ -1,0 +1,6 @@
+name: OPC UA Server
+language: python
+dockerfile: dockerfile
+runEntryPoint: main.py
+defaultFile: main.py
+libraryItemId: opc-ua-server
