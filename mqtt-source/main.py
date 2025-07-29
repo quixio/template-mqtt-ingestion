@@ -59,9 +59,9 @@ mqtt_client = paho.Client(
     protocol=mqtt_protocol_version(),
     transport="websockets",
 )
-mqtt_client.tls_set()
+# mqtt_client.tls_set()
 
-# mqtt_client.tls_set(tls_version = mqtt.client.ssl.PROTOCOL_TLS)  # we'll be using tls
+mqtt_client.tls_set(tls_version=mqtt.client.ssl.PROTOCOL_TLS)  # we'll be using tls
 mqtt_client.reconnect_delay_set(5, 60)
 configure_authentication(mqtt_client)
 
