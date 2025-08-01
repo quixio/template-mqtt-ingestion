@@ -6,7 +6,7 @@
     "languages": ["python"],
     "category": ["sample", "demo"]
   },
-  "ImageFile": "demo-image.png",
+  "ImageFile": "images/pipeline.png",
   "ReadmeFile": "README.md",
   "Published": true
 }
