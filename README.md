@@ -5,6 +5,9 @@ do some normalizations, and then publish the augmented data to an InfluxDB2 data
 
 It also includes visualization/dashboard examples using Grafana (which queries InfluxDB2).
 
+
+
+
 ## Running the Template
 
 ### Syncing
@@ -38,6 +41,8 @@ the UI, so make sure you save the value somewhere.
 Other services will reference these secrets directly in their project deployment 
 configurations, so they do not need to be manually entered.
 
+
+
 ## Project Architecture
 
 ### MQTT Ingestion Pipeline
@@ -70,6 +75,8 @@ There are various things that can be tweaked, like the name of the InfluxDB data
 However, everything in this template has predefined values except secrets, which will
 require defining upon deployment of this project (see 
 [setting secrets](#setting-secrets) for more info).
+
+
 
 
 ## Data Operations Overview
@@ -128,6 +135,7 @@ These events are then pushed to InfluxDB2 to database `my_bucket` under measurem
 | T001  | T002   | timestamp (_time)            | machine (_tag)   |
 |-------|--------|------------------------------|------------------|
 | 97.20 | 194.41 | "2025-07-28 15:52:51.600000" | "3D_PRINTER_2"   |
+
 
 
 
