@@ -33,8 +33,10 @@ Simply choose a secure password for each.
 
 Note that once set, you cannot view the values again. This largely only matters for 
 services like Grafana, where users will be required to directly enter them for access to 
-the UI. Other services will reference these secrets directly in their project deployment 
-configurations.
+the UI, so make sure you save the value somewhere. 
+
+Other services will reference these secrets directly in their project deployment 
+configurations, so they do not need to be manually entered.
 
 ## Project Architecture
 
