@@ -35,10 +35,12 @@ def window_finalizer(finalized_window: dict):
         "machine": machine
     }
 
+
 # Typical app setup
 app = Application(
     consumer_group="mqtt_data_normalization",
-    auto_offset_reset="earliest")
+    auto_offset_reset="earliest"
+)
 input_topic = app.topic(os.environ["input"], value_deserializer="bytes", key_deserializer="str")
 output_topic = app.topic(os.environ["output"])
 sdf = app.dataframe(input_topic)

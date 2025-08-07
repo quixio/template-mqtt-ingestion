@@ -45,17 +45,16 @@ configurations, so they do not need to be manually entered.
 
 ## Project Architecture
 
-### MQTT Ingestion Pipeline
+### MQTT Ingestion and Processing Pipeline
 
-This is the MQTT-based data ingestion portion of the project:
+This is the MQTT-based data ingestion and processing portion of the project:
 
 ![img](images/pipeline.png)
 
 
-
 ### Mock Data Source
 
-These applications are only meant to put our sample data in an MQTT broker:
+These applications are only meant to simulate an external data source:
 
 ![img](images/datagen.png)
 
@@ -72,9 +71,12 @@ These are standalone services, including an InfluxDB2 instance.
 ## Configuration
 
 There are various things that can be tweaked, like the name of the InfluxDB database. 
-However, everything in this template has predefined values except secrets, which will
-require defining upon deployment of this project (see 
-[setting secrets](#setting-secrets) for more info).
+Some will be configurable via environment, and others will require adjusting code as
+desired.
+
+Regardless, everything in this template has predefined values except secrets, which will
+require defining upon deployment of this project (see [setting secrets](#setting-secrets)).
+
 
 
 
@@ -143,9 +145,24 @@ These events are then pushed to InfluxDB2 to database `my_bucket` under measurem
 
 There is a simple Grafana dashboard included in the project.
 
-You can select which column to view (`T001`, `T002`) for the given graphs.
+### Accessing Grafana
+
+Click on the blue link to log in to Grafana.
+
+![img](images/grafana_link.png)
+
+- **username**: `admin`
+- **password**: whatever value `grafana_password` was set to when
+  first setting up the template.
+
+![img](images/grafana_login.png)
+
+
+### Using Grafana
 
 There is a simple Time Series graph and mean value gauge, each based on the 
 selected time window.
 
 ![img](images/grafana.png)
+
+You can select which column to view (`sensor_1`, `sensor_2`) for the given graphs.
