@@ -33,7 +33,7 @@ app = Application(
     commit_every=int(os.environ.get("BUFFER_SIZE", "1000")),
     commit_interval=float(os.environ.get("BUFFER_DELAY", "1")),
 )
-input_topic = app.topic(os.environ["input"])
+input_topic = app.topic(os.environ["input"], key_deserializer="str")
 
 sdf = app.dataframe(input_topic)
 sdf.sink(influxdb_v3_sink)
