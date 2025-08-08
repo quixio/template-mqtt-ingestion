@@ -41,6 +41,14 @@ the UI, so make sure you save the value somewhere.
 Other services will reference these secrets directly in their project deployment 
 configurations, so they do not need to be manually entered.
 
+### Service Startup Delays and Application Restarts
+
+Upon first sync, it is normal that some applications may restart/error a few times while 
+some of its dependencies are still starting up.
+
+Applications should not need to restart more than 3-5 times before everything is
+up and running.
+
 
 
 ## Project Architecture
@@ -157,8 +165,11 @@ Click on the blue link to log in to Grafana.
 
 ![img](images/grafana_login.png)
 
+Then, navigate to the dashboards tab:
 
-### Using Grafana
+![img](images/grafana_home.png)
+
+### Exploring the Dashboard
 
 There is a simple Time Series graph and mean value gauge, each based on the 
 selected time window.
