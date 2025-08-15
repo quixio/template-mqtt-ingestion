@@ -19,7 +19,7 @@ variables:
   - name: PARAMETER_NAMES_TO_PROCESS
     inputType: FreeText
     description: List of parameter names, comma-separated.
-    defaultValue: "T001,T002"
+    defaultValue: T001,T002
     required: true
   - name: LOGLEVEL
     inputType: FreeText
