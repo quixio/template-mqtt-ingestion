@@ -6,7 +6,7 @@ import os
 # from dotenv import load_dotenv
 # load_dotenv()
 
-app = Application(consumer_group="mqtt_consumer_group", auto_offset_reset='earliest')
+app = Application(consumer_group="mqtt_consumer_group", auto_offset_reset="earliest")
 input_topic = app.topic(os.environ["input"], value_deserializer="double")
 
 sink = MQTTSink(

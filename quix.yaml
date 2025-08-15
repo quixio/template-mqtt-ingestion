@@ -70,7 +70,7 @@ deployments:
         value: admin
       - name: MQTT_VERSION
         inputType: FreeText
-        description: 'MQTT protocol version: 3.1, 3.1.1, 5'
+        description: "MQTT protocol version: 3.1, 3.1.1, 5"
         required: true
         value: 3.1.1
       - name: MQTT_PASSWORD
@@ -115,12 +115,12 @@ deployments:
         value: http://quix.freeopcua.io
       - name: PARAMETER_NAMES_TO_PROCESS
         inputType: FreeText
-        description: List of parameters from your OPC UA server that you want to process. e.g. ['a', 'b', 'c']. NB:Use single quotes.
+        description: List of parameter names, comma-separated.
         required: true
-        value: "['T001', 'T002']"
+        value: T001,T002
       - name: LOGLEVEL
         inputType: FreeText
-        description: Desired loglevel; Use 'DEBUG' to see change events, else INFO for max performance.
+        description: Desired loglevel; Use DEBUG to see change events, else INFO for max performance.
         value: INFO
   - name: MQTT Sink
     application: mqtt-sink
@@ -167,14 +167,14 @@ deployments:
         secretKey: mqtt_password
       - name: MQTT_VERSION
         inputType: FreeText
-        description: 'MQTT protocol version: 3.1, 3.1.1, 5'
+        description: MQTT protocol version; 3.1, 3.1.1, or 5
         required: true
         value: 3.1.1
       - name: MQTT_USE_TLS
         inputType: FreeText
         description: Set to true if the server uses TLS
         required: true
-        value: false
+        value: "false"
   - name: OPC UA to MQTT
     application: opc-ua-to-mqtt
     version: latest
@@ -310,11 +310,11 @@ deployments:
         value: my_bucket
       - name: INFLUXDB_TAG_KEYS
         inputType: FreeText
-        description: 'The tags to include when writing the measurement data. Example: Tag1,Tag2'
+        description: "The tags to include when writing the measurement data. Example: Tag1,Tag2"
         value: machine
       - name: INFLUXDB_FIELD_KEYS
         inputType: FreeText
-        description: 'The fields to include when writing the measurement data. Example: Field1,Field2'
+        description: "The fields to include when writing the measurement data. Example: Field1,Field2"
       - name: CONSUMER_GROUP_NAME
         inputType: FreeText
         description: The name of the consumer group to use when consuming from Kafka
@@ -322,7 +322,7 @@ deployments:
         value: influxdb2-sink4
       - name: TIMESTAMP_COLUMN
         inputType: FreeText
-        description: 'The column containing the timestamp column. NOTE: Must be nanoseconds'
+        description: "The column containing the timestamp column. NOTE: Must be nanoseconds"
         value: timestamp
       - name: BUFFER_SIZE
         inputType: FreeText

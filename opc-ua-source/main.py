@@ -10,9 +10,7 @@ OPC_NAMESPACE = os.environ["OPC_NAMESPACE"]
 LOGLEVEL = os.getenv("LOGLEVEL", "INFO")
 TOPIC_NAME = os.environ["output"]
 
-params_to_process = os.getenv("PARAMETER_NAMES_TO_PROCESS", '')
-params_to_process = params_to_process.replace("'", "\"")
-PARAMETER_NAMES_TO_PROCESS = json.loads(params_to_process)
+PARAMETER_NAMES_TO_PROCESS = ','.split(os.environ["PARAMETER_NAMES_TO_PROCESS"])
 
 logging.getLogger("asyncua.common.subscription").setLevel(logging.WARNING)
 logging.getLogger("asyncua.client.ua_client.UaClient").setLevel(logging.WARNING)

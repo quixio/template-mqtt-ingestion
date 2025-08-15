@@ -16,7 +16,7 @@ class OpcUaSource(Source):
         name: str,
         opc_url: str,
         opc_namespace: str,
-        parameters: str,
+        parameters: list[str],
         ignore_processing_errors: bool = False,
     ) -> None:  
 
