@@ -90,7 +90,7 @@ These applications are only meant to simulate an external data source:
 
 These are standalone services, including an InfluxDB2 instance.
 
-<img src="images/services.png" width="600">
+<img src="images/services.png" width="400">
 
 
 
