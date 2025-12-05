@@ -16,7 +16,7 @@ Once the project is set up, an initial sync must be performed to deploy everythi
 Essentially, the cloud state must sync up to the current state of the new repository 
 which now has a cloned version of the template.
 
-![img](images/sync.png)
+<img src="images/sync.png" width="600">
 
 Syncing is always a manually initiated operation that's available whenever updates 
 to the code (underlying repository) happen.
@@ -30,9 +30,9 @@ to the code (underlying repository) happen.
 Upon syncing, there will be a prompt to set up some project-level secrets (passwords). 
 Simply choose a secure password for each.
 
-![img](images/secrets_missing.png)
+<img src="images/secrets_missing.png" width="600">
 
-![img](images/secrets_set.png)
+<img src="images/secrets_set.png" width="600">
 
 Note that once set, you cannot view the values again. This largely only matters for 
 services like Grafana, where users will be required to directly enter them for access to 
@@ -53,25 +53,44 @@ up and running.
 
 ## Project Architecture
 
+### Service Groups
+
+This template uses **service groups** in `quix.yaml` to logically categorize deployments,
+improving organization and management.
+
+| Group             | Description                                          |
+|-------------------|------------------------------------------------------|
+| *(ungrouped)*     | Core pipeline services (MQTT ingestion, processing, storage, visualization) |
+| `Example source`  | Mock data generation services (OPC UA server + source, MQTT sink) |
+
+Services can be assigned to a group using the `group` property in `quix.yaml`:
+
+```yaml
+- name: OPC UA Server
+  application: opc-ua-server
+  version: latest
+  group: Example source    # <-- assigns to "Example source" group
+```
+
 ### MQTT Ingestion and Processing Pipeline
 
 This is the MQTT-based data ingestion and processing portion of the project:
 
-![img](images/pipeline.png)
+<img src="images/pipeline.png" width="600">
 
 
-### Mock Data Source
+### Mock Data Source (Example source group)
 
 These applications are only meant to simulate an external data source:
 
-![img](images/datagen.png)
+<img src="images/datagen.png" width="600">
 
 
 ### Standalone Services
 
 These are standalone services, including an InfluxDB2 instance.
 
-![img](images/services.png)
+<img src="images/services.png" width="400">
 
 
 
@@ -157,23 +176,23 @@ There is a simple Grafana dashboard included in the project.
 
 Click on the blue link to log in to Grafana.
 
-![img](images/grafana_link.png)
+<img src="images/grafana_link.png" width="600">
 
 - **username**: `admin`
 - **password**: whatever value `grafana_password` was set to when
   first setting up the template.
 
-![img](images/grafana_login.png)
+<img src="images/grafana_login.png" width="600">
 
 Then, navigate to the dashboards tab:
 
-![img](images/grafana_home.png)
+<img src="images/grafana_home.png" width="600">
 
 ### Exploring the Dashboard
 
 There is a simple Time Series graph and mean value gauge, each based on the 
 selected time window.
 
-![img](images/grafana.png)
+<img src="images/grafana.png" width="600">
 
 You can select which column to view (`sensor_1`, `sensor_2`) for the given graphs.

@@ -79,6 +79,7 @@ deployments:
   - name: OPC UA Server
     application: opc-ua-server
     version: latest
+    group: Example source
     deploymentType: Service
     resources:
       cpu: 200
@@ -92,6 +93,7 @@ deployments:
   - name: OPC UA Source
     application: opc-ua-source
     version: latest
+    group: Example source
     deploymentType: Service
     resources:
       cpu: 200
@@ -125,6 +127,7 @@ deployments:
   - name: MQTT Sink
     application: mqtt-sink
     version: latest
+    group: Example source
     deploymentType: Service
     resources:
       cpu: 200
@@ -178,6 +181,7 @@ deployments:
   - name: OPC UA to MQTT
     application: opc-ua-to-mqtt
     version: latest
+    group: Example source
     deploymentType: Service
     resources:
       cpu: 200
